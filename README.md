@@ -6,8 +6,8 @@ by Programming Live Stream
 
 Creating Simple Page
 
-- [ ] Add List Page
-- [ ] Add Create Page
+- [X] Add List Page
+- [X] Add Create Page
 - [ ] Add View Page
 - [ ] Add Update Page
 
@@ -19,9 +19,9 @@ Displaying Record (GET)
 
 Form Submitting (POST)
 
-- [ ] Use POST for Creating TODO
-- [ ] Handling POST data
-- [ ] Validating Data and displaying error
+- [X] Use POST for Creating TODO
+- [X] Handling POST data
+- [X] Validating Data and displaying error
 - [ ] Save data using file handling
 - [ ] Updating todo data
 
