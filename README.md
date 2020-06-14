@@ -8,22 +8,22 @@ Creating Simple Page
 
 - [X] Add List Page
 - [X] Add Create Page
-- [ ] Add View Page
-- [ ] Add Update Page
+- [X] Add View Page
+- [X] Add Update Page
 
 Displaying Record (GET)
 
-- [ ] Fetch data using file handling
-- [ ] List of todos
-- [ ] View each todo
+- [X] Fetch data using file handling
+- [X] List of todos
+- [X] View each todo
 
 Form Submitting (POST)
 
 - [X] Use POST for Creating TODO
 - [X] Handling POST data
 - [X] Validating Data and displaying error
-- [ ] Save data using file handling
-- [ ] Updating todo data
+- [X] Save data using file handling
+- [X] Updating todo data
 
 ## Part 2 - Functions
 - [ ] Refactor listing of data to function
@@ -31,37 +31,46 @@ Form Submitting (POST)
 - [ ] Refactor updating of data to function
 - [ ] Put refactored function to different file (include, required)
 
-## Part 3 - Start of OOP (Class, Interface and Abstraction)
+## Part 3 - Session Handling
+- [ ] Create Login Page
+- [ ] Add simple authentication and authorization
+
+## Part 4 - Start of OOP (Class, Interface and Abstraction)
 - [ ] Create class for TODO List
 - [ ] Use the class for listing, create and updating todo
 - [ ] Add new class for handling data for file handler
 
-## Part 4 - Connecting to database (MySQL) and Digging Deeper
+## Part 5 - Connecting to database (MySQL) and Digging Deeper
 - [ ] Add new class for handling data for mysql handler
 - [ ] Digging deeper (Refactoring Folder Structure)
 
-## Part 5 - MVC and Routing
+## Part 6 - MVC and Routing
 - [ ] The model view controller
 - [ ] Create Model
 - [ ] Create Controller
 - [ ] Create View
 - [ ] Routing
 
-## Part 6 - Front Controller
+## Part 7 - Front Controller
 - [ ] Creating Front Controller
 - [ ] Use Front Controller
 
-## Part 7 - Digging Deeper
+## Part 8 - Digging Deeper
 - [ ] Composer
 - [ ] PHP Standards
 - [ ] Adding Twig for creating front end
 
-## Part 8 - SOLID Principle
+## Part 9 - SOLID Principle
 - [ ] Refactor Code to only use SOLID Principle
 
-## Part 9 - Summary
+## Part 10 - Automation Test
+- [ ] Unit Test
+- [ ] Integration Test
+- [ ] Acceptance Test
+
+## Part 11 - Summary
 - [ ] Overview of all what happened from pass sessions
 
-## Part 10 - Using Laravel
+## Part 12 - Using Laravel
 
-## Part 11 - Using Symfony
+## Part 13 - Using Symfony
