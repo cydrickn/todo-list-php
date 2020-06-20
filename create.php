@@ -1,4 +1,6 @@
 <?php
+    require_once __DIR__ . '/todo_functions.php';
+
     $title = 'Create Todo';
     $todo = $_POST;
     $errors = [];
@@ -6,34 +8,13 @@
     $todoTitle = '';
     $todoDescription = '';
     if (!empty($todo)) {
-        $todoTitle = trim($todo['title']);
-        if (strlen($todoTitle) < 4) {
-            $errors['title'] = 'Title length should be greater than or equal to 4.';
-        }
-        $todoDescription = trim($todo['description']);
-        if (strlen($todoDescription) < 15) {
-            $errors['description'] = 'Description length should be greater than or equal to 15.';
-        }
-
-        if (empty($errors)) {
-            $id = 0;
-            $filename = __DIR__ . '/todo.csv';
-            if (!file_exists($filename)) {
-                touch($filename);
-            }
-            $file = fopen($filename, 'r');
-            $todos = [];
-            do {
-                $item = fgetcsv($file);
-                $todos[] = $item;
-                $id++; // $id = $id + 1;
-            } while ($item !== false);
-            @fclose($file);
-            $file = fopen($filename, 'a');
-            $dataToSave = implode(',', [$id, $todoTitle, $todoDescription]);
-            fwrite($file,  $dataToSave . PHP_EOL);
-            @fclose($file);
-            header('Location: /view.php?id=' . $id);
+        $todoTitle = $_POST['title'];
+        $todoDescription = $_POST['description'];
+        $result = saveTodo(null, $todoTitle, $todoDescription);
+        if ($result['success']) {
+            header('Location: ./view.php?id=' . $result['data']['id']);
+        } else {
+            $errors = $result['errors'];
         }
     }
 ?>

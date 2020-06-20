@@ -1,42 +1,17 @@
 <?php
+    require_once __DIR__ . '/todo_functions.php';
     $id = $_GET['id'];
-    $filename = __DIR__ . '/todo.csv';
-    if (!file_exists($filename)) {
-        touch($filename);
-    }
-    $file = fopen($filename, 'r');
-    $todo = null;
-    $todos = [];
-    do {
-        $item = fgetcsv($file);
-        if ($item[0] === $id) {
-            $todo = $item;
-        }
-        if ($item !== false) {
-            $todos[$item[0]] = $item;
-        }
-    } while ($item !== false);
-    @fclose($file);
+
+    list($title, $description) = getTodo($id);
 
     $errors = [];
-    $title = trim($_POST['title'] ?? $todo[1]);
-    $description = trim($_POST['description'] ?? $todo[2]);
+    $title = trim($_POST['title'] ?? $title);
+    $description = trim($_POST['description'] ?? $description);
 
     if (!empty($_POST)) {
-        if (strlen($title) < 4) {
-            $errors['title'] = 'Title length should be greater than or equal to 4.';
-        }
-        if (strlen($description) < 15) {
-            $errors['description'] = 'Description length should be greater than or equal to 15.';
-        }
-
-        if (empty($errors)) {
-            $todos[$id] = [$id, $title, $description];
-            $newData = '';
-            foreach ($todos as $item) {
-                $newData .= implode(',', $item) . PHP_EOL;
-            }
-            file_put_contents($filename, $newData);
+        $result = saveTodo($id, $title, $description);
+        if (!$result['success']) {
+            $errors = $result['errors'];
         }
     }
 ?>

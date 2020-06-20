@@ -1,19 +1,8 @@
 <?php
-    $title = 'Todo List';
+    include __DIR__ . '/todo_functions.php';
 
-    $filename = __DIR__ . '/todo.csv';
-    if (!file_exists($filename)) {
-        touch($filename);
-    }
-    $file = fopen($filename, 'r');
-    $todoList = [];
-    do {
-        $item = fgetcsv($file);
-        if ($item !== false) {
-            $todoList[] = ['id' => $item[0], 'title' => $item[1], 'done' => false];
-        }
-    } while ($item !== false && $todo === null);
-    @fclose($file);
+    $title = 'Todo List';
+    $todoList = getList();
 ?>
 <html>
     <head>
@@ -29,10 +18,10 @@
                     <?php else: ?>
                         <input type="checkbox" />
                     <?php endif; ?>
-                    <a href="/view.php?id=<?php echo $todo['id'] ?>" target="_blank">
+                    <a href="/view.php?id=<?php echo $todo['id'] ?>">
                         <?php echo $todo['title']; ?>
                     </a>
-                    <a href="/update.php?id=<?php echo $todo['id'] ?>" target="_blank">Update</a>
+                    <a href="/update.php?id=<?php echo $todo['id'] ?>">Update</a>
                 </li>
             <?php endforeach; ?>
         </ol>
