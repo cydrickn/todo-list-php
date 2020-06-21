@@ -26,10 +26,11 @@ Form Submitting (POST)
 - [X] Updating todo data
 
 ## Part 2 - Functions
-- [ ] Refactor listing of data to function
-- [ ] Refactor creating of data to function
-- [ ] Refactor updating of data to function
-- [ ] Put refactored function to different file (include, required)
+- [X] Refactor listing of data to function
+- [X] Refactor creating of data to function
+- [X] Refactor updating of data to function
+- [X] Put refactored function to different file (include, required)
+- [X] Custom Database using file, with index and primary key
 
 ## Part 3 - Session Handling
 - [ ] Create Login Page

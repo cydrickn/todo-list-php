@@ -1,6 +1,14 @@
 <?php
     include __DIR__ . '/todo_functions.php';
-    list($title, $description) = getTodo($_GET['id']);
+
+    try {
+        $todo = getTodo($_GET['id']);
+        $title = $todo['title'];
+        $description = $todo['description'];
+    } catch (\Exception $exception) {
+        $title = 'Not found';
+        $description = 'TODO Not found';
+    }
 ?>
 <html>
     <head>
