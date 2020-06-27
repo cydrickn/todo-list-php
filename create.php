@@ -42,6 +42,7 @@
                 <?php endif; ?>
             </div>
             <button type="submit">Create</button>
+            <a href="/index.php">Back to List</a>
         </form>
     </body>
 </html>

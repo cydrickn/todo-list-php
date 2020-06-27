@@ -39,6 +39,7 @@
             <?php endif; ?>
         </div>
         <button type="submit">Update</button>
+        <a href="/index.php">Back to List</a>
     </form>
     </body>
 </html>

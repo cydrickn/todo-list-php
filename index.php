@@ -34,6 +34,6 @@
                 </div>
             <?php endforeach; ?>
         </div>
-        <a href="/create.php" target="_blank">Create TODO</a>
+        <a href="/create.php">Create TODO</a>
     </body>
 </html>
