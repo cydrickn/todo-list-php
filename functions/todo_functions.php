@@ -1,11 +1,5 @@
 <?php
 
-require_once __DIR__ . '/validation.php';
-
-$todoFolder = __DIR__ . '/data/todo';
-$todoIndexTitleFolder = __DIR__ . '/data/index/title';
-$todoPropertiesFileName = __DIR__ . '/data/todo_properties.json';
-
 function getList(string $title = ''): array
 {
     global $todoFolder;

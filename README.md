@@ -33,8 +33,8 @@ Form Submitting (POST)
 - [X] Custom Database using file, with index and primary key
 
 ## Part 3 - Session Handling
-- [ ] Create Login Page
-- [ ] Add simple authentication and authorization
+- [x] Create Login Page
+- [x] Add simple authentication and authorization
 
 ## Part 4 - Start of OOP (Class, Interface and Abstraction)
 - [ ] Create class for TODO List

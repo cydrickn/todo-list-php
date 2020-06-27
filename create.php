@@ -1,5 +1,7 @@
 <?php
-    require_once __DIR__ . '/todo_functions.php';
+    include __DIR__ . '/bootstrap.php';
+
+    checkLogined();
 
     $title = 'Create Todo';
     $todo = $_POST;

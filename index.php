@@ -1,5 +1,7 @@
 <?php
-    include __DIR__ . '/todo_functions.php';
+    include __DIR__ . '/bootstrap.php';
+
+    checkLogined();
 
     $title = 'Todo List';
     $todoList = getList($_GET['search'] ?? '');
@@ -9,6 +11,7 @@
         <title><?php echo $title; ?></title>
     </head>
     <body>
+        Welcome <?php echo $_SESSION['user']['name']; ?> <a href="logout.php">Log Out</a>
         <h1>My TODO List</h1>
         <div>
             <form>

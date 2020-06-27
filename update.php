@@ -1,12 +1,15 @@
 <?php
-    require_once __DIR__ . '/todo_functions.php';
+    include __DIR__ . '/bootstrap.php';
+
+    checkLogined();
+
     $id = $_GET['id'];
 
-    list($title, $description) = getTodo($id);
+    $todo = getTodo($id);
 
     $errors = [];
-    $title = trim($_POST['title'] ?? $title);
-    $description = trim($_POST['description'] ?? $description);
+    $title = trim($_POST['title'] ?? $todo['title']);
+    $description = trim($_POST['description'] ?? $todo['description']);
 
     if (!empty($_POST)) {
         $result = saveTodo($id, $title, $description);

@@ -1,5 +1,7 @@
 <?php
-    include __DIR__ . '/todo_functions.php';
+    include __DIR__ . '/bootstrap.php';
+
+    checkLogined();
 
     try {
         $todo = getTodo($_GET['id']);
