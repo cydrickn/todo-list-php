@@ -2,6 +2,7 @@
     include __DIR__ . '/bootstrap.php';
 
     checkLogined();
+    $todoService = $services[\Service\TodoService::class];
 
     $title = 'Create Todo';
     $todo = $_POST;
@@ -12,11 +13,11 @@
     if (!empty($todo)) {
         $todoTitle = $_POST['title'];
         $todoDescription = $_POST['description'];
-        $result = saveTodo(null, $todoTitle, $todoDescription);
-        if ($result['success']) {
-            header('Location: ./view.php?id=' . $result['data']['id']);
-        } else {
-            $errors = $result['errors'];
+        try {
+            $todo = $todoService->createTodo($todoTitle, $todoDescription);
+            header('Location: ./view.php?id=' . $todo->getId());
+        } catch (\Exceptions\InvalidTodoException $exception) {
+            $errors = $exception->getErrors();
         }
     }
 ?>

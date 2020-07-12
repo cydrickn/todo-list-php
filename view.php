@@ -2,23 +2,21 @@
     include __DIR__ . '/bootstrap.php';
 
     checkLogined();
+    $todoService = $services[\Service\TodoService::class];
 
-    try {
-        $todo = getTodo($_GET['id']);
-        $title = $todo['title'];
-        $description = $todo['description'];
-    } catch (\Exception $exception) {
-        $title = 'Not found';
-        $description = 'TODO Not found';
-    }
+    $todo = $todoService->getTodo($_GET['id']);
 ?>
 <html>
     <head>
         <title><?php echo $title; ?></title>
     </head>
     <body>
-        <h1><?php echo $title; ?></h1>
-        <p><?php echo $description ?></p>
+        <?php if ($todo !== null): ?>
+        <h1><?php echo $todo->getTitle(); ?></h1>
+        <p><?php echo $todo->getDescription(); ?></p>
+        <?php else: ?>
+            <h1>Todo Not found</h1>
+        <?php endif; ?>
         <a href="/index.php">Back to List</a>
     </body>
 </html>

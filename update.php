@@ -2,19 +2,21 @@
     include __DIR__ . '/bootstrap.php';
 
     checkLogined();
+    $todoService = $services[\Service\TodoService::class];
 
     $id = $_GET['id'];
 
-    $todo = getTodo($id);
+    $todo = $todoService->getTodo($id);
 
     $errors = [];
-    $title = trim($_POST['title'] ?? $todo['title']);
-    $description = trim($_POST['description'] ?? $todo['description']);
+    $title = trim($_POST['title'] ?? $todo->getTitle());
+    $description = trim($_POST['description'] ?? $todo->getDescription());
 
     if (!empty($_POST)) {
-        $result = saveTodo($id, $title, $description);
-        if (!$result['success']) {
-            $errors = $result['errors'];
+        try {
+            $todoService->updateTodo($id, $title, $description);
+        } catch (\Exceptions\InvalidTodoException $exception) {
+            $errors = $exception->getErrors();
         }
     }
 ?>

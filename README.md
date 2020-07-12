@@ -37,13 +37,12 @@ Form Submitting (POST)
 - [x] Add simple authentication and authorization
 
 ## Part 4 - Start of OOP (Class, Interface and Abstraction)
-- [ ] Create class for TODO List
-- [ ] Use the class for listing, create and updating todo
-- [ ] Add new class for handling data for file handler
+- [x] Create class for TODO List
+- [x] Use the class for listing, create and updating todo
+- [x] Add new class for handling data for file handler
 
 ## Part 5 - Connecting to database (MySQL) and Digging Deeper
 - [ ] Add new class for handling data for mysql handler
-- [ ] Digging deeper (Refactoring Folder Structure)
 
 ## Part 6 - MVC and Routing
 - [ ] The model view controller
