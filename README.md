@@ -40,6 +40,8 @@ Form Submitting (POST)
 - [x] Create class for TODO List
 - [x] Use the class for listing, create and updating todo
 - [x] Add new class for handling data for file handler
+- [x] Validator
+- [x] Authentication and Session
 
 ## Part 5 - Connecting to database (MySQL) and Digging Deeper
 - [ ] Add new class for handling data for mysql handler
@@ -50,6 +52,8 @@ Form Submitting (POST)
 - [ ] Create Controller
 - [ ] Create View
 - [ ] Routing
+
+- [ ] Security
 
 ## Part 7 - Front Controller
 - [ ] Creating Front Controller

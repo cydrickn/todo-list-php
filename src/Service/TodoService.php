@@ -4,6 +4,8 @@ namespace Service;
 
 use Exceptions\InvalidTodoException;
 use Model\Todo;
+use Validator\LengthRule;
+use Validator\Validator;
 
 class TodoService
 {
@@ -32,7 +34,18 @@ class TodoService
 
     public function createTodo(string $title, string $description): Todo
     {
-        $errors = validateTodo($title, $description);
+        $titleValidator = new Validator([new LengthRule(4, 16)]);
+        $descriptionValidator = new Validator([new LengthRule(15)]);
+        $titleValidator->validate($title, 'Title');
+        $descriptionValidator->validate($description, 'Description');
+        $errors = [];
+        if ($titleValidator->failed()) {
+            $errors['title'] = $titleValidator->getMessage();
+        }
+        if ($descriptionValidator->failed()) {
+            $errors['description'] = $titleValidator->getMessage();
+        }
+
         if (!empty($errors)) {
             throw new InvalidTodoException($errors);
         }

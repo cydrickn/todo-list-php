@@ -1,8 +1,9 @@
 <?php
     include __DIR__ . '/bootstrap.php';
 
-    checkLogined();
+    $sessionManager = $services[\Manager\SessionManager::class];
     $todoService = $services[\Service\TodoService::class];
+    $sessionManager->checkLoginedAndRedirect();
 
     $id = $_GET['id'];
 

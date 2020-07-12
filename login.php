@@ -5,7 +5,7 @@
         header('Location: index.php');
     }
 
-    $authentication = new Authentication($userFolder);
+    $authentication = $services[\Service\Authentication::class];
 
     $username = $_POST['username'] ?? '';
     $password = $_POST['password'] ?? '';
