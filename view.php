@@ -1,7 +1,6 @@
 <?php
     include __DIR__ . '/bootstrap.php';
 
-    checkLogined();
     $todoService = $services[\Service\TodoService::class];
 
     $todo = $todoService->getTodo($_GET['id']);

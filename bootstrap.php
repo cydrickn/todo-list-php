@@ -4,6 +4,7 @@ session_start();
 
 use Service\TodoService;
 use Service\TodoFileDataProvider;
+use Service\TodoMysqlDataProvider;
 use Service\UserService;
 use Service\UserFileDataProvider;
 use Manager\SessionManager;
@@ -20,6 +21,7 @@ require_once __DIR__ . '/src/Model/Todo.php';
 require_once __DIR__ . '/src/Service/TodoService.php';
 require_once __DIR__ . '/src/Service/TodoDataProviderInterface.php';
 require_once __DIR__ . '/src/Service/TodoFileDataProvider.php';
+require_once __DIR__ . '/src/Service/TodoMysqlDataProvider.php';
 require_once __DIR__ . '/src/Exceptions/InvalidTodoException.php';
 require_once __DIR__ . '/src/Model/User.php';
 require_once __DIR__ . '/src/Service/UserService.php';
@@ -36,7 +38,8 @@ require_once __DIR__ . '/functions/validation.php';
 
 $todoProperties = json_decode(file_get_contents($todoPropertiesFileName), true);
 
-$todoDataProvider = new TodoFileDataProvider($todoFolder, $todoIndexTitleFolder, $todoPropertiesFileName);
+//$todoDataProvider = new TodoFileDataProvider($todoFolder, $todoIndexTitleFolder, $todoPropertiesFileName);
+$todoDataProvider = new TodoMysqlDataProvider('database', 'todo', 'root', 'root');
 $userDataProvider = new UserFileDataProvider($userFolder);
 $sessionDataProvider = new PHPSessionDataProvider();
 $sessionManager = new SessionManager($sessionDataProvider, $userDataProvider, '/login.php');
