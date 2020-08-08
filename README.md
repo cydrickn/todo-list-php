@@ -43,8 +43,15 @@ Form Submitting (POST)
 - [x] Validator
 - [x] Authentication and Session
 
-## Part 5 - Connecting to database (MySQL) and Digging Deeper
-- [ ] Add new class for handling data for mysql handler
+## Part 5 - Connecting to database (MySQL)
+- [x] Add new class for handling data for mysql handler
+- [x] Prepare statement
+- [x] Tips on avoiding sql injection
+    - using `PDO::qoute` or `mysqli_real_escape_string`
+    - use `PDO::prepare`
+    - disable `PDO::ATTR_EMULATE_PREPARES`
+    - using charset `utf8` or `ascii`
+    - use mysql sql_mode `NO_BACKSLASH_ESCAPES`
 
 ## Part 6 - MVC and Routing
 - [ ] The model view controller
@@ -59,13 +66,13 @@ Form Submitting (POST)
 - [ ] Creating Front Controller
 - [ ] Use Front Controller
 
-## Part 8 - Digging Deeper
+## Part 8 - Composer
 - [ ] Composer
 - [ ] PHP Standards
 - [ ] Adding Twig for creating front end
 
 ## Part 9 - SOLID Principle
-- [ ] Refactor Code to only use SOLID Principle
+- [ ] Refactor Code to use SOLID Principle
 
 ## Part 10 - Automation Test
 - [ ] Unit Test

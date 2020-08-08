@@ -11,7 +11,7 @@ interface TodoDataProviderInterface
     /**
      * @return Todo[]|array
      */
-    public function list(): array;
+    public function list(string $search = ''): array;
     
     public function save(?int $id, string $title, string $description): Todo;
 }

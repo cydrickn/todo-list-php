@@ -7,27 +7,36 @@ use PDO;
 
 class TodoMysqlDataProvider implements TodoDataProviderInterface
 {
-    private $pdo;
+    private $connection;
 
-    public function __construct(string $dbHost, string $dbName, string $username, string $password)
+    public function __construct(MySqlConnection $connection)
     {
-        $dsn = 'mysql:dbname=' . $dbName . ';host=' . $dbHost;
-        $this->pdo = new PDO($dsn,$username, $password);
+        $this->connection = $connection;
     }
 
     public function find(int $id): ?Todo
     {
-        $statement = $this->pdo->query('SELECT * FROM `todo` WHERE `id` = ' . $id);
-        $todo = $statement->fetch();
+        $todos = $this->connection->select('SELECT * FROM `todo` WHERE `id` = ? LIMIT 1', [$id]);
+        if (count($todos) === 0) {
+            return null;
+        }
 
-        return new Todo($todo['id'], $todo['title'], $todo['description'], $todo['done_at'] !== null);
+        return new Todo(
+            $todos[0]['id'],
+            $todos[0]['title'],
+            $todos[0]['description'],
+            $todos[0]['done_at'] !== null
+        );
     }
 
-    public function list(): array
+    public function list(string $search = ''): array
     {
-        $statement = $this->pdo->query('SELECT * FROM `todo`');
+        $result = $this->connection->select(
+            'SELECT * FROM `todo` WHERE `title` LIKE :search',
+            ['search' => $search . '%']
+        );
         $todos = [];
-        foreach ($statement->fetchAll() as $todo) {
+        foreach ($result as $todo) {
             $todos[] = new Todo($todo['id'], $todo['title'], $todo['description'], $todo['done_at'] !== null);
         }
 
@@ -39,12 +48,28 @@ class TodoMysqlDataProvider implements TodoDataProviderInterface
         $now = new \DateTimeImmutable('now');
         $nowFormated = $now->format('Y-m-d H:i:s');
         if ($id === null) {
-            $this->pdo->exec('INSERT INTO `todo` (`title`, `description`, `created_at`, `updated_at`)'
-                . 'VALUES ("' . $title . '", "' . $description . '", "' .  $nowFormated . '", "' . $nowFormated . '")');
-            $id = $this->pdo->lastInsertId();
+            $this->connection->exec(
+                'INSERT INTO `todo` (`title`, `description`, `created_at`, `updated_at`)'
+                . 'VALUES (:title, :desc, :createdAt, :updatedAt)',
+                [
+                    'title' => $title,
+                    'desc' => $description,
+                    'createdAt' => $nowFormated,
+                    'updatedAt' => $nowFormated,
+                ]
+            );
+
+            $id = $this->connection->lastInsertId();
         } else{
-            $this->pdo->exec('UPDATE `todo` SET `title` = "' . $title. '", `description` = "' . $description . '"'
-                . ', `updated_at` = "' . $nowFormated . '" WHERE `id` = ' . $id);
+            $this->connection->exec(
+                'UPDATE `todo` SET `title` = :title, `description` = :desc, `updated_at` = :updatedAt WHERE `id` = :id',
+                [
+                    'title' => $title,
+                    'desc' => $description,
+                    'updatedAt' => $nowFormated,
+                    'id' => $id,
+                ]
+            );
         }
 
         return new Todo($id, $title, $description, false);
