@@ -53,16 +53,15 @@ Form Submitting (POST)
     - using charset `utf8` or `ascii`
     - use mysql sql_mode `NO_BACKSLASH_ESCAPES`
 
-## Part 6 - MVC and Routing
-- [ ] The model view controller
-- [ ] Create Model
-- [ ] Create Controller
-- [ ] Create View
-- [ ] Routing
-
+## Part 6 - MVC
+- [x] The model view controller
+- [x] Create Model
+- [x] Create Controller
+- [x] Create View
 - [ ] Security
 
 ## Part 7 - Front Controller
+- [ ] Routing
 - [ ] Creating Front Controller
 - [ ] Use Front Controller
 
