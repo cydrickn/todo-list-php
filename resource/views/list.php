@@ -31,16 +31,16 @@
                 <?php endif; ?>
             </div>
             <div class="col col-2">
-                <a href="/view.php?id=<?php echo $todo->getId(); ?>">
+                <a href="/index.php?action=view&id=<?php echo $todo->getId(); ?>">
                     <?php echo $todo->getTitle(); ?>
                 </a>
             </div>
             <div class="col col-1">
-                <a href="/update.php?id=<?php echo $todo->getId(); ?>">Update</a>
+                <a href="/index.php?action=update&id=<?php echo $todo->getId(); ?>">Update</a>
             </div>
         </div>
     <?php endforeach; ?>
 </div>
-<a href="/create.php">Create TODO</a>
+<a href="/index.php?action=create">Create TODO</a>
 </body>
 </html>

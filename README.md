@@ -62,8 +62,10 @@ Form Submitting (POST)
 
 ## Part 7 - Front Controller
 - [ ] Routing
-- [ ] Creating Front Controller
-- [ ] Use Front Controller
+- [x] Creating Front Controller
+- [x] Use Front Controller
+- [ ] Request
+- [ ] Response
 
 ## Part 8 - Composer
 - [ ] Composer

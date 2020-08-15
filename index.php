@@ -1,9 +1,8 @@
 <?php
-    include __DIR__ . '/bootstrap.php';
 
-    $controller = new \Controller\TodoController(
-        $services[\Service\TodoService::class],
-        $services[\Manager\SessionManager::class]
-    );
+include __DIR__ . '/bootstrap.php';
 
-    $controller->list();
+
+$frontController = new FrontController($services);
+$request = \Http\Request::createFromGlobal();
+echo $frontController->process($request);

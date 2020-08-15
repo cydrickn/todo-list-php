@@ -3,7 +3,13 @@
 session_start();
 
 spl_autoload_register(function (string $class) {
-    $path = __DIR__ . '/src/'. str_replace('\\', '/', $class) . '.php';
+    $psrMessageLengthNamespace = strlen('Psr\Http\Message');
+    if (substr($class, 0, $psrMessageLengthNamespace) === 'Psr\Http\Message') {
+        $path = __DIR__ . '/libs/http-message/src/'. str_replace('Psr\\Http\\Message\\', '', $class) . '.php';
+    } else {
+        $path = __DIR__ . '/src/'. str_replace('\\', '/', $class) . '.php';
+    }
+
     include_once $path;
 });
 
