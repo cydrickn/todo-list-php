@@ -10,6 +10,7 @@ use View\CreateView;
 use View\UpdateView;
 use View\TodoView;
 use Http\Request;
+use Http\Response;
 
 class TodoController
 {
@@ -27,11 +28,13 @@ class TodoController
         $todos = $this->todoService->getTodoList($request->getQuery('search', ''));
         $view = new ListView();
 
-        return $view->render([
+        $responseText = $view->render([
             'todoList' => $todos,
             'user' => $this->sessionManager->getCurrentUser(),
             'title' => 'Todo List',
         ]);
+
+        return new Response($responseText, 200);
     }
 
     public function create()
@@ -55,12 +58,14 @@ class TodoController
 
         $view = new CreateView();
 
-        return $view->render([
+        $responseText = $view->render([
             'title' => $title,
             'todoTitle' => $todoTitle,
             'todoDescription' => $todoDescription,
             'errors' => $errors,
         ]);
+
+        return new Response($responseText, 200);
     }
 
     public function update(Request $request)
@@ -83,11 +88,13 @@ class TodoController
 
         $view = new UpdateView();
 
-        return $view->render([
+        $responseText = $view->render([
             'title' => $title,
             'description' => $description,
             'errors' => $errors,
         ]);
+
+        return new Response($responseText, 200);
     }
 
     public function view(Request $request)
@@ -96,6 +103,8 @@ class TodoController
         $todo = $this->todoService->getTodo($id);
         $view = new TodoView();
 
-        return $view->render(['todo' => $todo]);
+        $responseText = $view->render(['todo' => $todo]);
+
+        return new Response($responseText, 200);
     }
 }

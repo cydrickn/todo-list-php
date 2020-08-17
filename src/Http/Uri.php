@@ -7,11 +7,26 @@ use Psr\Http\Message\UriInterface;
 class Uri implements UriInterface
 {
     private string $scheme;
+    private string $host;
+    private int $port;
+    private ?string $user;
+    private ?string $pass;
+    private string $path;
+    private string $fragment;
     private array $query;
 
-    public function __construct(string $scheme, array $query)
+    public function __construct(string $uri)
     {
-        $this->scheme = $scheme;
+        $uriParts = parse_url($uri);
+        $this->scheme = $uriParts['scheme'] ?? 'http';
+        $this->host = $uriParts['host'] ?? 'localhost';
+        $this->port = (int) $uriParts['port'] ?? 80;
+        $this->user = $uriParts['user'] ?? null;
+        $this->pass = $uriParts['pass'] ?? null;
+        $this->path = $uriParts['path'] ?? '/';
+        $this->fragment = $uriParts['fragment'] ?? '';
+        $query = [];
+        parse_str($uriParts['query'] ?? '', $query);
         $this->query = $query;
     }
 

@@ -61,11 +61,11 @@ Form Submitting (POST)
 - [ ] Security
 
 ## Part 7 - Front Controller
-- [ ] Routing
+- [ ] Routing (Apache and Nginx)
 - [x] Creating Front Controller
 - [x] Use Front Controller
 - [ ] Request
-- [ ] Response
+- [x] Response
 
 ## Part 8 - Composer
 - [ ] Composer

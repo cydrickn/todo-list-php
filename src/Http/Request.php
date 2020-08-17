@@ -3,85 +3,40 @@
 namespace Http;
 
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 
 class Request implements RequestInterface
 {
+    use MessageTrait;
+
     private string $method;
     private UriInterface $uri;
-    private ?string $body;
+    private array $post;
 
-    public function __construct(string $method, array $query, ?string $body)
-    {
+    public function __construct(
+        string $method,
+        $uri,
+        array $headers = [],
+        ?string $body = null,
+        string $version = '1.1'
+    ) {
         $this->method = $method;
-        $this->uri = new Uri('http', $query);
+        if (is_string($uri)) {
+            $this->uri = new Uri($uri);
+        } elseif ($uri instanceof UriInterface) {
+            $this->uri = $uri;
+        }
         $this->body = $body;
-    }
-
-    public function getProtocolVersion()
-    {
-        // TODO: Implement getProtocolVersion() method.
-    }
-
-    public function withProtocolVersion($version)
-    {
-        // TODO: Implement withProtocolVersion() method.
-    }
-
-    public function getHeaders()
-    {
-        // TODO: Implement getHeaders() method.
-    }
-
-    public function hasHeader($name)
-    {
-        // TODO: Implement hasHeader() method.
-    }
-
-    public function getHeader($name)
-    {
-        // TODO: Implement getHeader() method.
-    }
-
-    public function getHeaderLine($name)
-    {
-        // TODO: Implement getHeaderLine() method.
-    }
-
-    public function withHeader($name, $value)
-    {
-        // TODO: Implement withHeader() method.
-    }
-
-    public function withAddedHeader($name, $value)
-    {
-        // TODO: Implement withAddedHeader() method.
-    }
-
-    public function withoutHeader($name)
-    {
-        // TODO: Implement withoutHeader() method.
-    }
-
-    public function getBody()
-    {
-        return $this->body;
-    }
-
-    public function withBody(StreamInterface $body)
-    {
-        // TODO: Implement withBody() method.
+        $this->headers = $headers;
+        $this->version = $version;
     }
 
     public function getRequestTarget()
     {
-        // TODO: Implement getRequestTarget() method.
     }
 
     public function withRequestTarget($requestTarget)
     {
-        // TODO: Implement withRequestTarget() method.
     }
 
     public function getMethod()
@@ -91,28 +46,43 @@ class Request implements RequestInterface
 
     public function withMethod($method)
     {
-        // TODO: Implement withMethod() method.
     }
 
-    public function getUri()
+    public function getUri(): UriInterface
     {
         return $this->uri;
     }
 
-    public function withUri(UriInterface $uri, $preserveHost = false)
+    public function withUri(UriInterface $uri, $preserveHost = false): RequestInterface
     {
-        // TODO: Implement withUri() method.
-    }
-
-    public static function createFromGlobal(): RequestInterface
-    {
-        $method = $_SERVER['REQUEST_METHOD'];
-
-        return new Request($method, $_GET, null);
+        return new Request($this->method, $uri, $this->headers, $this->body, $this->version);
     }
 
     public function getQuery(string $parameter, $default = null)
     {
         return $this->getUri()->getQuery()[$parameter] ?? $default;
+    }
+
+    public function getPost(string $parameter, $default = null)
+    {
+        return $this->post[$parameter] ?? $default;
+    }
+
+    public static function createFromGlobal(): RequestInterface
+    {
+        $method = $_SERVER['REQUEST_METHOD'];
+        $headers = headers_list();
+        $contentType = $headers['Content-Type'];
+        $formTypes = ['application/x-www-form-urlencoded', 'multipart/form-data'];
+        $body = null;
+        if (in_array($contentType, $formTypes)) {
+            $body = file_get_contents('php://input');
+        }
+        $uri = $_SERVER['REQUEST_SCHEME'] . '://' . $_ENV['HTTP_HOST']. $_SERVER['REQUEST_URI'];
+
+        $request = new Request($method, $uri, $headers, $body);
+        $request->post = $_POST;
+
+        return $request;
     }
 }

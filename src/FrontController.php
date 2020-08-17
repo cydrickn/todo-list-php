@@ -45,7 +45,9 @@ class FrontController
         }
         list($controllerName, $actionName) = explode('@', $handlerName);
 
-        return call_user_func([$this->controllers[$controllerName], $actionName], $request);
+        $response = call_user_func([$this->controllers[$controllerName], $actionName], $request);
+
+        return $response->render();
     }
 
     private function getHandlerName($action): ?string
