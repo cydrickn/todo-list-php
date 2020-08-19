@@ -2,111 +2,218 @@
 
 namespace Http;
 
+use InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
 
 class Uri implements UriInterface
 {
+    private const SCHEME_PORTS = ['http' => 80, 'https' => 443];
+    private const SUPPORTED_SCHEMES = ['http', 'https'];
+
     private string $scheme;
     private string $host;
-    private int $port;
-    private ?string $user;
-    private ?string $pass;
+    private ?int $port;
+    private string $user;
+    private ?string $password;
     private string $path;
+    private string $query;
     private string $fragment;
-    private array $query;
 
     public function __construct(string $uri)
     {
         $uriParts = parse_url($uri);
-        $this->scheme = $uriParts['scheme'] ?? 'http';
-        $this->host = $uriParts['host'] ?? 'localhost';
-        $this->port = (int) $uriParts['port'] ?? 80;
-        $this->user = $uriParts['user'] ?? null;
-        $this->pass = $uriParts['pass'] ?? null;
-        $this->path = $uriParts['path'] ?? '/';
+        $this->scheme = $uriParts['scheme'];
+        $this->host = strtolower($uriParts['host'] ?? 'localhost');
+        $this->setPort($uriParts['port'] ?? null);
+        $this->user = $uriParts['user'] ?? '';
+        $this->password = $uriParts['password'] ?? null;
+        $this->path = $uriParts['path'] ?? '';
+        $this->query = $uriParts['query'] ?? '';
         $this->fragment = $uriParts['fragment'] ?? '';
-        $query = [];
-        parse_str($uriParts['query'] ?? '', $query);
-        $this->query = $query;
     }
 
-    public function getScheme()
+    private function setPort(?int $port): void
+    {
+        if (self::SCHEME_PORTS[$this->scheme] === $port) {
+            $this->port = null;
+
+            return;
+        }
+
+        $this->port = $port;
+    }
+
+    public function getScheme(): string
     {
         return $this->scheme;
     }
 
-    public function getAuthority()
+    public function getAuthority(): string
     {
-        // TODO: Implement getAuthority() method.
+        $authority = $this->host;
+        if ($this->getUserInfo() !== '') {
+            $authority = $this->getUserInfo() . '@' . $this->host;
+        }
+
+        if ($this->getPort() !== null) {
+            $authority .= ':' . $this->getPort();
+        }
+
+        return $authority;
     }
 
-    public function getUserInfo()
+    public function getUserInfo(): string
     {
-        // TODO: Implement getUserInfo() method.
+        $userInfo = $this->user;
+        if ($this->password !== null && $this->password !== '') {
+            $userInfo .= ':' . $this->password;
+        }
+
+        return $userInfo;
     }
 
-    public function getHost()
+    public function getHost(): string
     {
-        // TODO: Implement getHost() method.
+        return $this->host;
     }
 
-    public function getPort()
+    public function getPort(): ?int
     {
-        // TODO: Implement getPort() method.
+        return $this->port;
     }
 
-    public function getPath()
+    public function getPath(): string
     {
-        // TODO: Implement getPath() method.
+        $path = trim($this->path, '/'); // user = user
+
+        return '/' . $this->path;
     }
 
-    public function getQuery()
+    public function getQuery(): string
     {
         return $this->query;
     }
 
-    public function getFragment()
+    public function getFragment(): string
     {
-        // TODO: Implement getFragment() method.
+        return $this->fragment;
     }
 
-    public function withScheme($scheme)
+    public function withScheme($scheme): self
     {
-        // TODO: Implement withScheme() method.
+        if ($this->scheme === $scheme) {
+            return $this;
+        }
+
+        if (!in_array($scheme, self::SUPPORTED_SCHEMES)) {
+            throw new InvalidArgumentException('Unsupported scheme');
+        }
+
+        $clone = clone $this;
+        $clone->scheme = $scheme;
+
+        return $clone;
     }
 
-    public function withUserInfo($user, $password = null)
+    public function withUserInfo($user, $password = null): self
     {
-        // TODO: Implement withUserInfo() method.
+        $clone = clone $this;
+        $clone->user = $user;
+        $clone->password = $password;
+
+        return $clone;
     }
 
-    public function withHost($host)
+    public function withHost($host): self
     {
-        // TODO: Implement withHost() method.
+        if (!is_string($host)) {
+            throw new InvalidArgumentException('Invalid Host');
+        }
+
+        if (strtolower($host) === strtolower($this->host)) {
+            return $this;
+        }
+
+        $clone = clone $this;
+        $clone->host = strtolower($host);
+        
+        return $clone;
     }
 
-    public function withPort($port)
+    public function withPort($port): self
     {
-        // TODO: Implement withPort() method.
+        if ($port === $this->port) {
+            return $this;
+        }
+
+        $clone = clone $this;
+        $clone->setPort($port);
+
+        return $clone;
     }
 
-    public function withPath($path)
+    public function withPath($path): self
     {
-        // TODO: Implement withPath() method.
+        if (!is_string($path)) {
+            throw new InvalidArgumentException('Invalid path');
+        }
+
+        if ($path === $this->path) {
+            return $this;
+        }
+
+        $clone = clone $this;
+        $clone->path = $path;
+
+        return $clone;
     }
 
-    public function withQuery($query)
+    public function withQuery($query): self
     {
-        // TODO: Implement withQuery() method.
+        if (!is_string($query)) {
+            throw new InvalidArgumentException('Invalid query');
+        }
+
+        if ($query === $this->query) {
+            return $this;
+        }
+
+        $clone = clone $this;
+        $clone->query = $query;
+
+        return $clone;
     }
 
-    public function withFragment($fragment)
+    public function withFragment($fragment): self
     {
-        // TODO: Implement withFragment() method.
+        if ($fragment === $this->fragment) {
+            return $this;
+        }
+
+        $clone = clone $this;
+        $clone->fragment = $fragment;
+
+        return $clone;
     }
 
     public function __toString()
     {
-        // TODO: Implement __toString() method.
+        $query = '';
+        if ($this->query !== '') {
+            $query = '?' . $this->query;
+        }
+        $fragment = '';
+        if ($this->fragment !== '') {
+            $fragment = '#' . $this->fragment;
+        }
+
+        return sprintf(
+            '%s://%s%s%s%s',
+            $this->getScheme(),
+            $this->getAuthority(),
+            $this->getPath(),
+            $query,
+            $fragment
+        );
     }
 }

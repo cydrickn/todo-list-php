@@ -2,25 +2,29 @@
 
 namespace Http;
 
+use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
 
 class Response implements ResponseInterface
 {
     use MessageTrait;
 
-    private int $code;
-    private string $reasonPhrase;
+    private const REASON_PHRASES = [
+        200 => 'Ok',
+        201 => 'Created',
+        400 => 'Bad Request',
+        404 => 'Not Found',
+        // TODO: add all status code reason phrases
+    ];
 
-    public function __construct(string $body = '', int $code = 200, array $headers = [], string $reasonPhrase = '')
+    private int $code;
+
+    public function __construct(int $code, $body = null, array $headers = [], string $version = '1.1')
     {
-        $defaultHeaders = [
-            'Content-Type' => 'text/html',
-        ];
-        $this->headers = array_merge($defaultHeaders, $headers);
-        $this->body = $body;
         $this->code = $code;
-        $this->reasonPhrase = $reasonPhrase;
+        $this->setBody($body);
+        $this->setHeaders($headers);
+        $this->protocol = $version;
     }
 
     public function getStatusCode(): int
@@ -28,22 +32,24 @@ class Response implements ResponseInterface
         return $this->code;
     }
 
-    public function withStatus($code, $reasonPhrase = ''): ResponseInterface
+    public function withStatus($code, $reasonPhrase = ''): self
     {
-         return new Response($this->body, $code, $this->headers, $reasonPhrase);
+        if (!is_int($code)) {
+            throw new InvalidArgumentException('Argument 1 must be integer only');
+        }
+
+        if ($this->code === $code) {
+            return $this;
+        }
+
+        $clone = clone $this;
+        $clone->code = $code;
+
+        return $clone;
     }
 
     public function getReasonPhrase(): string
     {
-        return $this->reasonPhrase;
-    }
-
-    public function render()
-    {
-        foreach ($this->headers as $header => $value) {
-            header($header . ': ' . $value);
-        }
-
-        return $this->body;
+        return self::REASON_PHRASES[$this->code] ?? '';
     }
 }
