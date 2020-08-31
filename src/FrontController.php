@@ -3,6 +3,7 @@
 use Controller\TodoController;
 use Service\TodoService;
 use Manager\SessionManager;
+use Http\ServerRequest;
 
 class FrontController
 {
@@ -33,9 +34,9 @@ class FrontController
         ];
     }
 
-    public function process(\Http\Request $request): string
+    public function process(ServerRequest $request): string
     {
-        $action = $request->getUri()->getQuery()['action'];
+        $action = $request->getQueryParam('action');
         if ($action === null) {
             $action = 'list';
         }
@@ -47,7 +48,11 @@ class FrontController
 
         $response = call_user_func([$this->controllers[$controllerName], $actionName], $request);
 
-        return $response->render();
+        foreach ($response->getHeaders() as $header => $value) {
+            header($header . ': ' . $response->getHeaderLine($header));
+        }
+
+        return (string) $response->getBody();
     }
 
     private function getHandlerName($action): ?string

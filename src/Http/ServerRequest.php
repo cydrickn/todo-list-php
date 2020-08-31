@@ -15,6 +15,26 @@ class ServerRequest implements ServerRequestInterface
     private $parsedBody;
     private array $attributes;
 
+    public function __construct(
+        string $method,
+        $uri,
+        array $headers = [],
+        array $servers = [],
+        array $cookies = [],
+        array $attributes = [],
+        $body = null,
+        string $version = '1.1'
+    ) {
+        $this->method = strtolower($method);
+        $this->protocol = $version;
+        $this->servers = $servers;
+        $this->cookies = $cookies;
+        $this->attributes = $attributes;
+        $this->setUri($uri);
+        $this->setHeaders($headers);
+        $this->setBody($body);
+    }
+
     public function getServerParams()
     {
         return $this->servers;
@@ -43,6 +63,11 @@ class ServerRequest implements ServerRequestInterface
         }
 
         return $this->queries;
+    }
+
+    public function getQueryParam(string $param, $default = null)
+    {
+        return $this->getQueryParams()[$param] ?? $default;
     }
 
     public function withQueryParams(array $query): self

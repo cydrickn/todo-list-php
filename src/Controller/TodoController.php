@@ -9,10 +9,11 @@ use Exceptions\InvalidTodoException;
 use View\CreateView;
 use View\UpdateView;
 use View\TodoView;
-use Http\Request;
 use Http\Response;
+use Http\ServerRequest;
+use View\View;
 
-class TodoController
+class TodoController extends AbstractController
 {
     private TodoService $todoService;
     private SessionManager $sessionManager;
@@ -23,18 +24,15 @@ class TodoController
         $this->sessionManager = $sessionManager;
     }
 
-    public function list(Request $request)
+    public function list(ServerRequest $request)
     {
-        $todos = $this->todoService->getTodoList($request->getQuery('search', ''));
-        $view = new ListView();
+        $todos = $this->todoService->getTodoList($request->getQueryParam('search', ''));
 
-        $responseText = $view->render([
+        return $this->responseAsView('list.php', [
             'todoList' => $todos,
             'user' => $this->sessionManager->getCurrentUser(),
             'title' => 'Todo List',
         ]);
-
-        return new Response($responseText, 200);
     }
 
     public function create()
@@ -56,21 +54,17 @@ class TodoController
             }
         }
 
-        $view = new CreateView();
-
-        $responseText = $view->render([
+        return $this->responseAsView('create.php', [
             'title' => $title,
             'todoTitle' => $todoTitle,
             'todoDescription' => $todoDescription,
             'errors' => $errors,
         ]);
-
-        return new Response($responseText, 200);
     }
 
-    public function update(Request $request)
+    public function update(ServerRequest $request)
     {
-        $id = $request->getQuery('id');
+        $id = $request->getQueryParam('id');
 
         $todo = $this->todoService->getTodo($id);
 
@@ -86,25 +80,18 @@ class TodoController
             }
         }
 
-        $view = new UpdateView();
-
-        $responseText = $view->render([
+        return $this->responseAsView('update.php', [
             'title' => $title,
             'description' => $description,
             'errors' => $errors,
         ]);
-
-        return new Response($responseText, 200);
     }
 
-    public function view(Request $request)
+    public function view(ServerRequest $request)
     {
-        $id = $request->getQuery('id');
+        $id = $request->getQueryParam('id');
         $todo = $this->todoService->getTodo($id);
-        $view = new TodoView();
 
-        $responseText = $view->render(['todo' => $todo]);
-
-        return new Response($responseText, 200);
+        return $this->responseAsView('view.php', ['todo' => $todo]);
     }
 }

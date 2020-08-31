@@ -17,23 +17,26 @@ class Stream implements StreamInterface
     /** @var resource|null */
     private $stream;
     private ?int $size;
-    private bool $seekable;
-    private bool $writable;
-    private bool $readable;
+    private ?bool $seekable;
+    private ?bool $writable;
+    private ?bool $readable;
 
     public function __construct($body = null)
     {
-        if (!is_string($body) && !is_resource($body) && $body === null) {
+        if (!is_string($body) && !is_resource($body) && $body !== null) {
             throw new InvalidArgumentException('Argument 1 must be string, resource or null');
         }
-        
+
         if (is_string($body)) {
             $resource = fopen('php://temp', 'w+');
             fwrite($resource, $body);
             $body = $resource;
         }
-
         $this->stream = $body;
+        $this->seekable = null;
+        $this->writable = null;
+        $this->readable = null;
+
         if ($this->isSeekable()) {
             fseek($body, 0, SEEK_CUR);
         }

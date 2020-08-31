@@ -9,11 +9,17 @@ class Response implements ResponseInterface
 {
     use MessageTrait;
 
+    public const HTTP_CODE_OK = 200;
+    public const HTTP_CODE_CREATED = 201;
+    public const HTTP_CODE_BAD_REQUEST = 400;
+    public const HTTP_CODE_NOT_FOUND = 404;
+    // TODO: add all status codes
+
     private const REASON_PHRASES = [
-        200 => 'Ok',
-        201 => 'Created',
-        400 => 'Bad Request',
-        404 => 'Not Found',
+        Response::HTTP_CODE_OK => 'Ok',
+        Response::HTTP_CODE_CREATED => 'Created',
+        Response::HTTP_CODE_BAD_REQUEST => 'Bad Request',
+        Response::HTTP_CODE_NOT_FOUND => 'Not Found',
         // TODO: add all status code reason phrases
     ];
 
@@ -23,8 +29,13 @@ class Response implements ResponseInterface
     {
         $this->code = $code;
         $this->setBody($body);
-        $this->setHeaders($headers);
+        $this->setHeaders(array_merge($this->getDefaultHeaders(), $headers));
         $this->protocol = $version;
+    }
+
+    private function getDefaultHeaders(): array
+    {
+        return ['Content-Type' => 'text/html'];
     }
 
     public function getStatusCode(): int
